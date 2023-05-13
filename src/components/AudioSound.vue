@@ -1,8 +1,10 @@
 <template>
-  <audio id="MyAudioElement" ref="audioRef" :autoplay="props.autoPlay">
-    <source :src="props.src" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <teleport to="body">
+    <audio ref="audioRef" :autoplay="props.autoPlay">
+      <source :src="props.src" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </teleport>
 </template>
 
 <script setup>
@@ -30,6 +32,7 @@ const props = defineProps({
 const emit = defineEmits(['ended'])
 
 defineExpose({
+  played: () => played(),
   ended: () => ended()
 })
 
