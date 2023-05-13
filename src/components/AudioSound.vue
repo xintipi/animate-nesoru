@@ -1,7 +1,8 @@
 <template>
-  <teleport to="body">
-    <div class="audio-sound" />
-  </teleport>
+  <audio id="MyAudioElement" ref="audioRef" :autoplay="props.autoPlay">
+    <source :src="props.src" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 </template>
 
 <script setup>
@@ -11,6 +12,10 @@ const props = defineProps({
   src: {
     type: String,
     default: ''
+  },
+  autoPlay: {
+    type: Boolean,
+    default: false
   },
   action: {
     type: Boolean,
@@ -45,26 +50,20 @@ const updateDurationInMinutes = () => {
 }
 
 const played = () => {
-  if (!audioRef.value) return
-
-  audioRef.value.src = props.src
   audioRef.value.play()
 }
 
 const ended = () => {
-  if (!audioRef.value) return
-
   audioRef.value.pause()
   audioRef.value.currentTime = 0
-
   clearTimeout(pauseTimeout)
   clearInterval(loopInterval)
 }
 
 const graduallySound = () => {
-  // Gradually reduce the volume over 2 seconds
-  const fadeOutDuration = 1000 // milliseconds
-  const stepInterval = 50 // milliseconds
+  // Gradually reduce the volume over 1 seconds
+  const fadeOutDuration = 1000
+  const stepInterval = 20
   const step = audioRef.value.volume * stepInterval / fadeOutDuration
 
   const volumeInterval = setInterval(() => {
@@ -78,7 +77,24 @@ const graduallySound = () => {
 }
 
 onMounted(() => {
-  audioRef.value = new Audio()
+  Audio.prototype.play = ((play) => {
+    return function () {
+      const audio = this,
+        args = arguments,
+        promise = play.apply(audio, args);
+      if (promise) {
+        promise.catch(() => {
+          // Autoplay was prevented. This is optional, but add a button to start playing.
+          const el = document.createElement('button');
+          el.innerHTML = 'Play';
+          el.addEventListener('click', function () {
+            play.apply(audio, args);
+          });
+          this.parentNode.insertBefore(el, this.nextSibling)
+        });
+      }
+    };
+  })(Audio.prototype.play);
 
   if (props.duration) {
     loopInterval = setInterval(setLoop, 100)
@@ -86,10 +102,6 @@ onMounted(() => {
     pauseTimeout = setTimeout(() => {
       graduallySound()
     }, durationInMinutes.value * 1000)
-  }
-
-  if (props.action) {
-    played()
   }
 })
 

@@ -48,6 +48,7 @@
       @ended="onEndAudio"
       :action="campFire"
       :duration="durationInMinutes"
+      :auto-play="true"
       ref="audioCampFire"
       src="/audio/campfire-crackling.mp3"/>
 
@@ -97,7 +98,7 @@
       </div>
     </transition-group>
 
-    <view-bonfire-footer @tabClick="tabClick" :active-tab="activeTab" :footer-items="footerItems"/>
+    <view-bonfire-footer @tabClick="tabClick" :active-tab="activeTab" :footer-items="footerNav"/>
 
     <img class="img-footer" src="@/assets/images/footer.png" alt="footer">
   </div>
@@ -109,86 +110,28 @@ import TourGuide from '@/components/TourGuide.vue';
 import AudioSound from "@/components/AudioSound.vue";
 import FireVideo from "@/components/FireVideo.vue";
 
+import {slides} from "@/mocks/slides";
+import {timers} from "@/mocks/timers";
+import {footerNav} from "@/mocks/footer-nav";
+
 import {ref} from 'vue'
 
 import {useRouter} from "vue-router";
 
 const router = useRouter()
 
-const slides = ref([])
-const footerItems = ref([])
-const timers = ref([])
 const tutorialStep = ref(1)
+
 const activeTab = ref(0)
+
 const durationInMinutes = ref(20) // 20 minutes default
+
 const audioCampFire = ref(null)
 const videoCampFire = ref(null)
+
 const isPlayed = ref(false)
 const campFire = ref(true)
-
 let modalActive = ref(true)
-
-slides.value = [
-  {
-    id: 1,
-    target: '',
-    content: 'こちらは焚き火を眺めるモードです 主な機能を説明します'
-  },
-  {
-    id: 2,
-    target: '#nav-1',
-    content: `サウンドボタンをタップすると サウンドの再生、選択ができます`
-  },
-  {
-    id: 3,
-    target: '#nav-2',
-    content: `タイマーをセットすると 設定した時間で火が消えます 設定しない場合は20分で終了します`
-  },
-  {
-    id: 4,
-    target: '#nav-3',
-    content: `終了したい時は消火を タップしてください`
-  },
-]
-
-timers.value = [
-  {
-    id: 1,
-    text: '3分',
-    time: 3 // 3 minutes
-  },
-  {
-    id: 2,
-    text: '10分',
-    time: 10 // 10 minutes
-  },
-  {
-    id: 3,
-    text: '8時間',
-    time: 480 // 8 hours
-  }
-]
-
-footerItems.value = [
-  {
-    tab: 1,
-    url: require('@/assets/images/icon_bgm.png'),
-    activeUrl: require('@/assets/images/icon_bgm_active.png'),
-    text: "サウンド",
-  },
-  {
-    tab: 2,
-    url: require('@/assets/images/icon_timer.png'),
-    activeUrl: require('@/assets/images/icon_timer_active.png'),
-    text: "タイマー",
-  },
-  {
-    tab: 3,
-    url: require('@/assets/images/icon_exit.png'),
-    activeUrl: require('@/assets/images/icon_exit_active.png'),
-    text: "消火",
-  }
-]
 
 const onEndAudio = () => {
   setTimeout(() => {
