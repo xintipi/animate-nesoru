@@ -34,7 +34,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits(["tabClick"]);
+const emit = defineEmits(['tabClick']);
 
 const handleTabClick = (currentTab) => {
   emit('tabClick', currentTab)

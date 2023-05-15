@@ -28,7 +28,7 @@ const router = useRouter();
 
 const switchPage = () => {
   setTimeout(() => {
-    router.push('/exit2')
+    router.push('/top')
   }, 2000)
 }
 
@@ -108,12 +108,12 @@ onMounted(() => {
 }
 
 .coal {
-  width: 350px;
+  width: calc(100% - 50px);
   z-index: 1;
 }
 
 .sub-coal {
-  width: 350px;
+  width: calc(100% - 50px);
   z-index: 3;
 }
 

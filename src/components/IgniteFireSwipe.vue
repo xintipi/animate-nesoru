@@ -107,7 +107,7 @@ const onTouchMove = (event) => {
 }
 
 .match-box {
-  width: 114px;
+  width: 100px;
   position: absolute;
   left: calc(100% * 0.3);
   bottom: 85px;
@@ -162,6 +162,7 @@ const onTouchMove = (event) => {
 
       p {
         margin: 0 26px;
+        font-weight: 500;
       }
     }
 

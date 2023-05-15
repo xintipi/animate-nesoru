@@ -50,16 +50,14 @@ const onTouchImage = (evt) => {
 <style lang="scss" scoped>
 .fuel-page {
   background-image: url(@/assets/images/bg_kareha.jpg);
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 
   .overlay {
     position: fixed;
@@ -74,20 +72,22 @@ const onTouchImage = (evt) => {
 
   &__img {
     position: relative;
-    top: 15px;
+    margin-top: 15px;
+    width: 300px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 300px;
-    max-height: 300px;
 
     .img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
 
       &__bonfiresheet {
         z-index: 0;
+        width: 100%;
+        height: 100%;
       }
 
       &__firestand {
@@ -105,7 +105,7 @@ const onTouchImage = (evt) => {
     z-index: 1;
 
     img {
-      width: calc(100% / 2);
+      width: 10vw;
       animation: slideInDown 3s ease-in-out infinite;
     }
   }

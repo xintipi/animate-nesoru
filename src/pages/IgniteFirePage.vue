@@ -49,7 +49,7 @@ const onLoad = () => {
 
 .bg__ignite {
   background-image: url(@/assets/images/bg_kareha.jpg);
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -86,6 +86,7 @@ const onLoad = () => {
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 100%;
   }
 
   &__img {
@@ -94,12 +95,14 @@ const onLoad = () => {
     justify-content: center;
     position: absolute;
     top: 15px;
-    max-width: 300px;
-    max-height: 300px;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    height: 300px;
 
     .img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
 
       &__bonfiresheet {

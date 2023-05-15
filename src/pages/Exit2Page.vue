@@ -37,7 +37,7 @@ const heightBtn = ref(100 / 2);
 
 .bg__exit {
   background-image: url(@/assets/images/bg_kareha.jpg);
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -67,6 +67,7 @@ const heightBtn = ref(100 / 2);
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 100%;
   }
 
   &__inform {

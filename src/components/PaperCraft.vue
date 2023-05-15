@@ -18,8 +18,8 @@
 }
 
 .craft {
-  animation: slideInDown 1.5s ease-in-out infinite;
-  width: 49px;
+  animation: slideInDown 2s ease-in-out infinite;
+  width: 40px;
 }
 
 .arrow-down {

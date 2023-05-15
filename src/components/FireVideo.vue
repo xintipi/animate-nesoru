@@ -28,23 +28,6 @@ const durationInMinutes = ref(props.duration * 60)
 let loopInterval
 let pauseTimeout
 
-const played = () => {
-  if (!videoRef.value) return
-
-  videoRef.value.src = props.src
-  videoRef.value.play()
-}
-
-const ended = () => {
-  if (!videoRef.value) return
-
-  videoRef.value.pause()
-  videoRef.value.currentTime = 0
-
-  clearTimeout(pauseTimeout)
-  clearInterval(loopInterval)
-}
-
 const setLoop = () => {
   const video = videoRef.value
   if (video && video.currentTime >= video.duration) {
@@ -56,33 +39,42 @@ const updateDurationInMinutes = () => {
   durationInMinutes.value = props.duration * 60
 }
 
+const played = () => {
+  videoRef.value.src = props.src
+  videoRef.value.play()
+}
+
+const ended = () => {
+  videoRef.value.pause()
+  videoRef.value.currentTime = 0
+
+  clearTimeout(pauseTimeout)
+  clearInterval(loopInterval)
+}
+
+// create function: gradually playbackRate slow in 1 seconds
 const graduallyVideo = () => {
   const video = videoRef.value
-  if (!video) return
+  const step = 0.25
+  const interval = 1000
 
-  const totalSteps = 1000 // miliseconds
-  let count = 0
+  const intervalId = setInterval(() => {
+    if (video.playbackRate > step) {
+      video.playbackRate -= step
+    } else {
+      video.playbackRate = 0
 
-  const slowVideoStep = () => {
-    if (count >= totalSteps) {
-      ended()
+      if (!video.ended) {
+        ended()
+      }
+
+      clearTimeout(pauseTimeout)
+      clearInterval(loopInterval)
+      clearInterval(intervalId)
+
       emit('ended')
-      return
     }
-
-    const step = count / totalSteps
-    video.playbackRate = Math.abs(1 - (step / 5))
-
-    count++
-
-    if (video.currentTime >= video.duration) {
-      video.currentTime = 0
-    }
-
-    requestAnimationFrame(slowVideoStep)
-  }
-
-  requestAnimationFrame(slowVideoStep)
+  }, interval)
 }
 
 onMounted(() => {

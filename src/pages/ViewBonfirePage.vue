@@ -1,55 +1,71 @@
 <template>
   <div class="view-bonfire">
-    <div class="overlay" />
+    <div class="overlay"/>
 
     <div class="view-bonfire__wrap">
       <div class="view-bonfire__img">
         <img src="@/assets/images/bonfiresheet.png" alt="bonfiresheet" class="img img__bonfiresheet">
         <fire-video
+          @ended="onEndVideo"
           :duration="durationInMinutes"
           ref="videoCampFire"
           class="img img__fire"
-          src="https://filebin.net/baqy6ekcv5sx3vv8/fire.mp4" />
+          src="video/fire.mp4"/>
       </div>
 
       <img src="@/assets/images/effect_firelight.png" alt="effectfirelight" class="view-bonfire__flare">
     </div>
 
-    <tour-guide
-      @closeModal="modalActive = false"
-      :modal-active="modalActive"
-      :tutorial-step="tutorialStep"
-      :slides="slides"
-      :width="310"
-      :height="230">
+    <!-- Modal ask to turn on audio camp fire -->
+    <base-modal v-model:modal-active="audioActive" :width="310" :height="230">
       <template #header>
-        <template v-for="slide in slides" :key="slide.id">
-          <p class="title" v-show="tutorialStep === slide.id">{{ slide.content }}</p>
-        </template>
-      </template>
-
-      <template #body>
-        <template v-for="slide in slides" :key="slide.id">
-          <span class="dots" :class="{ 'white-color' : tutorialStep === slide.id }"/>
-        </template>
+        <p class="title">キャンプファイヤーの音を体験してみませんか？</p>
       </template>
 
       <template #footer>
         <div class="btn-group">
-          <button v-if="tutorialStep > 1" @click="prevStep" class="btn btn-gray">もどる</button>
-          <button @click="nextStep" class="btn btn-yellow">つぎへ</button>
+          <button @click="onTurnOnAudio" class="btn btn-yellow">もつ</button>
+          <button @click="onTurnOffAudio" class="btn btn-gray">そうで</button>
         </div>
       </template>
-    </tour-guide>
+    </base-modal>
+    <!-- End modal turn on audio camp fire -->
 
-    <audio-sound src="/audio/birdsong.mp3" :action="isPlayed" />
+    <!-- Modal tutorial -->
+    <transition name="fade">
+      <div v-if="turnOnAudio">
+        <tour-guide
+          v-model:modal-active="tourGuideActive"
+          :tutorial-step="tutorialStep"
+          :slides="slides"
+          :width="310"
+          :height="230">
+          <template #header>
+            <template v-for="slide in slides" :key="slide.id">
+              <p class="title" v-show="tutorialStep === slide.id">{{ slide.content }}</p>
+            </template>
+          </template>
 
-    <audio-sound
-      @ended="onEndAudio"
-      :action="campFire"
-      :duration="durationInMinutes"
-      ref="audioCampFire"
-      src="/audio/campfire-crackling.mp3"/>
+          <template #body>
+            <template v-for="slide in slides" :key="slide.id">
+              <span class="dots" :class="{ 'white-color' : tutorialStep === slide.id }"/>
+            </template>
+          </template>
+
+          <template #footer>
+            <div class="btn-group">
+              <button v-if="tutorialStep > 1" @click="prevStep" class="btn btn-gray">もどる</button>
+              <button @click="nextStep" class="btn btn-yellow">つぎへ</button>
+            </div>
+          </template>
+        </tour-guide>
+      </div>
+    </transition>
+    <!-- End modal tutorial -->
+
+    <audio-sound src="audio/birdsong.mp3" :action="isPlayed"/>
+
+    <audio-sound src="audio/campfire-crackling.mp3" :action="campFireAudio" :duration="durationInMinutes"/>
 
     <transition-group name="fade">
       <!-- bgm popup -->
@@ -97,9 +113,21 @@
       </div>
     </transition-group>
 
-    <view-bonfire-footer @tabClick="tabClick" :active-tab="activeTab" :footer-items="footerNav"/>
+    <transition-group name="fade">
+      <template v-if="turnOnAudio">
+        <view-bonfire-footer
+          key="fire-footer"
+          :active-tab="activeTab"
+          :footer-items="footerNav"
+          @tabClick="tabClick"/>
 
-    <img class="img-footer" src="@/assets/images/footer.png" alt="footer">
+        <img
+          key="img-footer"
+          class="img-footer"
+          src="@/assets/images/footer.png"
+          alt="footer">
+      </template>
+    </transition-group>
   </div>
 </template>
 
@@ -108,12 +136,13 @@ import ViewBonfireFooter from '@/components/ViewBonfireFooter.vue'
 import TourGuide from '@/components/TourGuide.vue';
 import AudioSound from "@/components/AudioSound.vue";
 import FireVideo from "@/components/FireVideo.vue";
+import BaseModal from "@/components/BaseModal.vue";
 
 import {slides} from "@/mocks/slides";
 import {timers} from "@/mocks/timers";
 import {footerNav} from "@/mocks/footer-nav";
 
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 
 import {useRouter} from "vue-router";
 
@@ -123,14 +152,34 @@ const tutorialStep = ref(1)
 const activeTab = ref(0)
 const durationInMinutes = ref(20) // 20 minutes default
 
-const audioCampFire = ref(null)
 const videoCampFire = ref(null)
 
 const isPlayed = ref(false)
-const campFire = ref(true)
-let modalActive = ref(true)
+const campFireAudio = ref(false)
+const turnOnAudio = ref(false)
+const audioActive = ref(true)
 
-const onEndAudio = () => {
+let tourGuideActive = ref(true)
+
+watch(() => audioActive.value, (value) => {
+  if (!value) {
+    setTimeout(() => {
+      turnOnAudio.value = true
+    }, 2000)
+  }
+})
+
+const onTurnOnAudio = () => {
+  campFireAudio.value = true
+  audioActive.value = false
+}
+
+const onTurnOffAudio = () => {
+  campFireAudio.value = false
+  audioActive.value = false
+}
+
+const onEndVideo = () => {
   setTimeout(() => {
     router.push('/exit1')
   }, 500)
@@ -142,11 +191,11 @@ const setTimer = (time) => {
 
 const approveTimer = () => {
   console.log(durationInMinutes.value, 'minutes')
+  handleClosePopup()
 }
 
 const nextPage = () => {
-  // videoCampFire.value.ended()
-  // audioCampFire.value.ended()
+  videoCampFire.value.ended()
   router.push('/exit1')
 }
 
@@ -159,7 +208,7 @@ const endBirdSong = () => {
 }
 
 const nextStep = () => {
-  tutorialStep.value < 4 ? tutorialStep.value++ : modalActive.value = false
+  tutorialStep.value < 4 ? tutorialStep.value++ : tourGuideActive.value = false
 }
 
 const prevStep = () => {
@@ -167,7 +216,9 @@ const prevStep = () => {
 }
 
 const tabClick = (currentTab) => {
-  activeTab.value = currentTab
+  if (!tourGuideActive.value) {
+    activeTab.value = currentTab
+  }
 }
 
 const handleClosePopup = () => {
@@ -178,20 +229,19 @@ const handleClosePopup = () => {
 <style scoped lang="scss">
 .view-bonfire {
   background-image: url(@/assets/images/bg_kareha.jpg);
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 
   &__img {
     position: relative;
-    top: 15px;
-    max-width: 300px;
-    max-height: 300px;
-    margin: auto;
+    margin: 15px auto auto;
+    width: 300px;
+    height: 300px;
 
     .img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
 
       &__fire {

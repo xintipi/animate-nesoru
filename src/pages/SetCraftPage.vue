@@ -41,7 +41,7 @@ const heightBtn = ref(100 / 2);
 
 .bg__setcraft {
   background-image: url(@/assets/images/bg_kareha.jpg);
-  background-position: top center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -77,6 +77,7 @@ const heightBtn = ref(100 / 2);
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 100%;
   }
 
   .paper-craft {
@@ -100,14 +101,15 @@ const heightBtn = ref(100 / 2);
     justify-content: center;
     position: absolute;
     top: 15px;
-    max-width: 300px;
-    max-height: 300px;
-    margin: auto;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    height: 300px;
     z-index: 3;
 
     .img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
 
       &__square {
