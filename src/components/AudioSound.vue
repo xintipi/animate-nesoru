@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <audio ref="audioRef" :autoplay="props.autoPlay">
+    <audio ref="audioRef">
       <source :src="props.src" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
@@ -80,24 +80,21 @@ const graduallySound = () => {
 }
 
 onMounted(() => {
-  Audio.prototype.play = ((play) => {
-    return function () {
-      const audio = this,
-        args = arguments,
-        promise = play.apply(audio, args);
-      if (promise) {
-        promise.catch(() => {
-          // Autoplay was prevented. This is optional, but add a button to start playing.
-          const el = document.createElement('button');
-          el.innerHTML = 'Play';
-          el.addEventListener('click', function () {
-            play.apply(audio, args);
-          });
-          this.parentNode.insertBefore(el, this.nextSibling)
+  if (props.action) {
+    audioRef.value.oncanplaythrough = () => {
+      const playedPromise = audioRef.value.play();
+      if (playedPromise) {
+        playedPromise.catch((e) => {
+          console.log(e)
+          if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
+            console.log(e.name);
+          }
+        }).then(() => {
+          console.log("playing sound !!!");
         });
       }
-    };
-  })(Audio.prototype.play);
+    }
+  }
 
   if (props.duration) {
     loopInterval = setInterval(setLoop, 100)

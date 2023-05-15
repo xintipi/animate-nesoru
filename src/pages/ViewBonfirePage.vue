@@ -48,7 +48,6 @@
       @ended="onEndAudio"
       :action="campFire"
       :duration="durationInMinutes"
-      :auto-play="true"
       ref="audioCampFire"
       src="/audio/campfire-crackling.mp3"/>
 
@@ -121,9 +120,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 
 const tutorialStep = ref(1)
-
 const activeTab = ref(0)
-
 const durationInMinutes = ref(20) // 20 minutes default
 
 const audioCampFire = ref(null)
@@ -148,8 +145,8 @@ const approveTimer = () => {
 }
 
 const nextPage = () => {
-  videoCampFire.value.ended()
-  audioCampFire.value.ended()
+  // videoCampFire.value.ended()
+  // audioCampFire.value.ended()
   router.push('/exit1')
 }
 
