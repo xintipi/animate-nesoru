@@ -9,7 +9,7 @@
           :duration="durationInMinutes"
           ref="videoCampFire"
           class="img img__fire"
-          src="video/fire.mp4" />
+          src="https://filebin.net/baqy6ekcv5sx3vv8/fire.mp4" />
       </div>
 
       <img src="@/assets/images/effect_firelight.png" alt="effectfirelight" class="view-bonfire__flare">
