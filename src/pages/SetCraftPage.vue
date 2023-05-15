@@ -40,7 +40,7 @@ const heightBtn = ref(100 / 2);
 }
 
 .bg__setcraft {
-  background-image: url(@/assets/images/bg_kareha.png);
+  background-image: url(@/assets/images/bg_kareha.jpg);
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;

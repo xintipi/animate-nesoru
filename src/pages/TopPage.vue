@@ -26,7 +26,7 @@ const router = useRouter()
 
 <style scoped lang="scss">
 .top {
-  background-image: url("@/assets/images/bg1.png");
+  background-image: url('@/assets/images/bg1.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
