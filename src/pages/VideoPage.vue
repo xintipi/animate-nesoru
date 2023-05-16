@@ -12,7 +12,7 @@
       @ended="onEnded"
       preload="metadata"
       playsinline>
-      <source src="https://filebin.net/baqy6ekcv5sx3vv8/demo.mp4#t=0.1" type="video/mp4">
+      <source src="/video/demo.mp4#t=0.01" type="video/mp4">
     </video>
 
     <div class="description">

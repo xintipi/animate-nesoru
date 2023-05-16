@@ -1,8 +1,7 @@
 <template>
   <teleport to="body">
-    <audio ref="audioRef">
+    <audio ref="audioRef" @timeupdate="setLoop">
       <source :src="props.src" type="audio/mpeg">
-      Your browser does not support the audio element.
     </audio>
   </teleport>
 </template>
@@ -14,10 +13,6 @@ const props = defineProps({
   src: {
     type: String,
     default: ''
-  },
-  autoPlay: {
-    type: Boolean,
-    default: false
   },
   action: {
     type: Boolean,
@@ -43,8 +38,15 @@ let loopInterval
 let pauseTimeout
 
 const setLoop = () => {
-  if (audioRef.value && audioRef.value.currentTime >= audioRef.value.duration) {
-    audioRef.value.play()
+  const audio = audioRef.value
+  if (!audio) return
+
+  const currentTime = audio.currentTime
+  const buffer = .44
+
+  if (audio && currentTime >= audio.duration - buffer) {
+    audio.currentTime = 0
+    audio.play()
   }
 }
 
@@ -53,12 +55,19 @@ const updateDurationInMinutes = () => {
 }
 
 const played = () => {
+  const audio = audioRef.value
+  if (!audio) return
+
   audioRef.value.play()
 }
 
 const ended = () => {
-  audioRef.value.pause()
-  audioRef.value.currentTime = 0
+  const audio = audioRef.value
+  if (!audio) return
+
+  audio.pause()
+  audio.currentTime = 0
+
   clearTimeout(pauseTimeout)
   clearInterval(loopInterval)
 }
@@ -66,7 +75,7 @@ const ended = () => {
 const graduallySound = () => {
   // Gradually reduce the volume over 1 seconds
   const fadeOutDuration = 1000
-  const stepInterval = 20
+  const stepInterval = 5
   const step = audioRef.value.volume * stepInterval / fadeOutDuration
 
   const volumeInterval = setInterval(() => {

@@ -30,7 +30,11 @@ let pauseTimeout
 
 const setLoop = () => {
   const video = videoRef.value
-  if (video && video.currentTime >= video.duration) {
+  const currentTime = video.currentTime
+  const buffer = .44
+
+  if (video && currentTime >= video.duration - buffer) {
+    video.currentTime = 0
     video.play()
   }
 }
@@ -40,13 +44,19 @@ const updateDurationInMinutes = () => {
 }
 
 const played = () => {
-  videoRef.value.src = props.src
-  videoRef.value.play()
+  const video = videoRef.value
+  if (!video) return
+
+  video.src = props.src
+  video.play()
 }
 
 const ended = () => {
-  videoRef.value.pause()
-  videoRef.value.currentTime = 0
+  const video = videoRef.value
+  if (!video) return
+
+  video.pause()
+  video.currentTime = 0
 
   clearTimeout(pauseTimeout)
   clearInterval(loopInterval)
@@ -55,7 +65,7 @@ const ended = () => {
 // create function: gradually playbackRate slow in 1 seconds
 const graduallyVideo = () => {
   const video = videoRef.value
-  const step = 0.25
+  const step = 0.44
   const interval = 1000
 
   const intervalId = setInterval(() => {

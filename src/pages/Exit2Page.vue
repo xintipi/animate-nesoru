@@ -90,9 +90,10 @@ const heightBtn = ref(100 / 2);
     justify-content: center;
     position: absolute;
     top: 15px;
-    max-width: 300px;
-    max-height: 300px;
-    margin: auto;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    height: 300px;
     z-index: 3;
 
     .img {

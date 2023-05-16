@@ -28,7 +28,7 @@ const router = useRouter();
 
 const switchPage = () => {
   setTimeout(() => {
-    router.push('/top')
+    router.push('/exit2')
   }, 2000)
 }
 
@@ -61,13 +61,15 @@ const animateDown = (speed) => {
 
 onMounted(() => {
   setTimeout(() => {
-    const potsRect = potsRef.value?.getBoundingClientRect();
-    const coalRect = coalRef.value?.getBoundingClientRect();
+    const potsRect = potsRef.value && potsRef.value.getBoundingClientRect();
+    const coalRect = coalRef.value && coalRef.value.getBoundingClientRect();
 
-    const distance = coalRect?.bottom - (potsRect.top + potsRect.height / 2) - 50;
-    const speed = distance / 2000;
+    if (potsRect && coalRect) {
+      const distance = coalRect.bottom - (potsRect.top + potsRect.height / 2) - 50;
+      const speed = distance / 2000;
 
-    animateDown(speed);
+      animateDown(speed);
+    }
   }, 1500);
 });
 </script>

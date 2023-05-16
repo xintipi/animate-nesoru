@@ -119,10 +119,10 @@ const heightBtn = ref(100 / 2);
         width: 100%;
         height: 100%;
         z-index: 2;
-        -webkit-animation: zoom 1.5s linear infinite alternate;
-        -moz-animation:    zoom 1.5s linear infinite alternate;
-        -o-animation:      zoom 1.5s linear infinite alternate;
-        animation:         zoom 1.5s linear infinite alternate;
+        -webkit-animation: zoom 2s linear infinite alternate;
+        -moz-animation:    zoom 2s linear infinite alternate;
+        -o-animation:      zoom 2s linear infinite alternate;
+        animation:         zoom 2s linear infinite alternate;
       }
 
       &__takibidai {
@@ -167,45 +167,49 @@ const heightBtn = ref(100 / 2);
 
 @-webkit-keyframes zoom {
   0% {
-    -ms-transform: scale(1, 1);
-    transform: scale(1, 1) translateZ(10px);
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.9, 0.9);
   }
   100% {
-    -ms-transform: scale(0.8, 0.8);
-    transform: scale(0.8, 0.8) translateZ(10px);
+    transform: scale(1, 1);
   }
 }
 
 @-moz-keyframes zoom {
   0% {
-    -ms-transform: scale(1, 1);
-    transform: scale(1, 1) translateZ(10px);
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.9, 0.9);
   }
   100% {
-    -ms-transform: scale(0.8, 0.8);
-    transform: scale(0.8, 0.8) translateZ(10px);
+    transform: scale(1, 1);
   }
 }
 
 @-o-keyframes zoom {
   0% {
-    -ms-transform: scale(1, 1);
-    transform: scale(1, 1) translateZ(10px);
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.9, 0.9);
   }
   100% {
-    -ms-transform: scale(0.8, 0.8);
-    transform: scale(0.8, 0.8) translateZ(10px);
+    transform: scale(1, 1);
   }
 }
 
 @keyframes zoom {
   0% {
-    -ms-transform: scale(1, 1);
-    transform: scale(1, 1) translateZ(10px);
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.9, 0.9);
   }
   100% {
-    -ms-transform: scale(0.8, 0.8);
-    transform: scale(0.8, 0.8) translateZ(10px);
+    transform: scale(1, 1);
   }
 }
 

@@ -19,13 +19,13 @@
     <!-- Modal ask to turn on audio camp fire -->
     <base-modal v-model:modal-active="audioActive" :width="310" :height="230">
       <template #header>
-        <p class="title">キャンプファイヤーの音を体験してみませんか？</p>
+        <p class="title">引き続き音声を再生しますか？</p>
       </template>
 
       <template #footer>
         <div class="btn-group">
-          <button @click="onTurnOnAudio" class="btn btn-yellow">もつ</button>
-          <button @click="onTurnOffAudio" class="btn btn-gray">そうで</button>
+          <button @click="onTurnOnAudio" class="btn btn-yellow">はい</button>
+          <button @click="onTurnOffAudio" class="btn btn-gray">いいえ</button>
         </div>
       </template>
     </base-modal>
@@ -65,7 +65,7 @@
 
     <audio-sound src="audio/birdsong.mp3" :action="isPlayed"/>
 
-    <audio-sound src="audio/campfire-crackling.mp3" :action="campFireAudio" :duration="durationInMinutes"/>
+    <audio-sound src="audio/bonfire_se_cutmix.mp3" :action="campFireAudio" :duration="durationInMinutes"/>
 
     <transition-group name="fade">
       <!-- bgm popup -->
@@ -142,7 +142,7 @@ import {slides} from "@/mocks/slides";
 import {timers} from "@/mocks/timers";
 import {footerNav} from "@/mocks/footer-nav";
 
-import {ref, watch} from 'vue'
+import {onUnmounted, ref, watch} from 'vue'
 
 import {useRouter} from "vue-router";
 
@@ -161,9 +161,17 @@ const audioActive = ref(true)
 
 let tourGuideActive = ref(true)
 
+let timeoutAudio = null
+let timeoutSwitch = null
+
+onUnmounted(() => {
+  clearTimeout(timeoutAudio)
+  clearTimeout(timeoutSwitch)
+})
+
 watch(() => audioActive.value, (value) => {
   if (!value) {
-    setTimeout(() => {
+    timeoutAudio = setTimeout(() => {
       turnOnAudio.value = true
     }, 2000)
   }
@@ -180,7 +188,7 @@ const onTurnOffAudio = () => {
 }
 
 const onEndVideo = () => {
-  setTimeout(() => {
+  timeoutSwitch = setTimeout(() => {
     router.push('/exit1')
   }, 500)
 }
